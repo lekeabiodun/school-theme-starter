@@ -18,7 +18,7 @@ class SiteController extends Controller
         // $blocks = Page::with('blocks')->whereLink('home')->first()->blocks->sortBy('blockIndex');
         // $page = 'page';
         // if(file_exists(resource_path('views/themes/'.$this->theme_name.'/index.blade.php'))){ $page = 'index'; }
-        return view('themes.'.$this->theme_name.'.index');
+        return view('themes.'.$this->theme_name.'.page');
     }
 
     public function about()
