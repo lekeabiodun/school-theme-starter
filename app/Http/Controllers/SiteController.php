@@ -7,42 +7,41 @@ use Illuminate\Http\Request;
 class SiteController extends Controller
 {
     public $theme_name;
+    public $title;
 
     public function __construct()
     {
-        $this->theme_name = 'default';
+        $this->theme_name = env('THEME_NAME');
     }
 
     public function index()
     {
-        // $blocks = Page::with('blocks')->whereLink('home')->first()->blocks->sortBy('blockIndex');
-        // $page = 'page';
-        // if(file_exists(resource_path('views/themes/'.$this->theme_name.'/index.blade.php'))){ $page = 'index'; }
-        return view('themes.'.$this->theme_name.'.page');
+        $blocks = collect(explode(',', env('THEME_INDEX_BLOCKS')))->map(function($block) { return (object) ['name' => $block]; });
+        return view("themes.$this->theme_name.page", compact('blocks'));
     }
 
     public function about()
     {
-        $blocks = Page::with('blocks')->whereLink('about')->first()->blocks->sortBy('blockIndex');
-        $title = get_site('about_title');
+        $blocks = collect(explode(',', env('THEME_ABOUT_BLOCKS')))->map(function($block) { return (object) ['name' => $block]; });
+        $this->title = "About" ; #get_site('about_title');
         $subtitle = get_site('about_subtitle');
-        $page = 'page';
-        if(file_exists(resource_path('views/themes/'.$this->theme_name.'/about.blade.php'))){ $page = 'about'; }
-    	return view('themes.'.$this->theme_name.'.'.$page, compact('blocks', 'title', 'subtitle'));
+        // dd("Hit");
+    	return view("themes.$this->theme_name.page", ['blocks' => $blocks, 'title'=>$this->title, 'subtitle'=>$subtitle]);
     }
 
     public function contact()
     {
-        $blocks = Page::with('blocks')->whereLink('contact')->first()->blocks->sortBy('blockIndex');
-        $title = get_site('contact_title');
+        $blocks = collect(explode(',', env('THEME_CONTACT_BLOCKS')))->map(function($block) { return (object) ['name' => $block]; });
+        $title = "Contact"; #get_site('contact_title');
         $subtitle = get_site('contact_subtitle');
-        $page = 'page';
-        if(file_exists(resource_path('views/themes/'.$this->theme_name.'/contact.blade.php'))){ $page = 'contact'; }
-        return view('themes.'.$this->theme_name.'.'.$page, compact('blocks', 'title', 'subtitle'));
+        return view("themes.$this->theme_name.page", compact('blocks', 'title', 'subtitle'));
     }
 
     public function contactUs()
     {
+        if(request()->ajax()) {
+            return ['type' => 'success', 'text' => 'Thanks for contacting us, we will get back to you shortly'];
+        }
         return back()->withSuccess('Thanks for contacting us, we will get back to you shortly');
     }
 
@@ -50,13 +49,6 @@ class SiteController extends Controller
     {
         return view('themes.'.$this->theme_name.'.event');
     }
-
-    // public function page($page)
-    // {
-    //     $page = Post::whereSlug($page)->first();
-    //     if($page){ return view('themes.'.$this->theme_name.'.page', compact('page')); }
-    //     return abort('404');
-    // }
 
     public function post($post)
     {
