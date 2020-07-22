@@ -126,7 +126,8 @@ function site_data() {
 				'link' => 'https://www.twitter.com/littleones',
 			]
 		]),
-		'logo' => asset('storage/favicon.ico'),
+		'favicon' => asset('storage/favicon.ico'),
+		'logo' => asset('storage/logo.png'),
 		'logo-light' => asset('storage/logo-light.png'),
 
 		

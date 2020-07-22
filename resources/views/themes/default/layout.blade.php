@@ -32,7 +32,7 @@
 	   <!-- LayerSlider stylesheet -->
       <link rel="stylesheet" href="{{ theme_asset('default/assets/layerslider/css/layerslider.css') }}">
       <!-- Favicons-->
-      <link rel="shortcut icon" href="{{ get_site('logo') }}" type="image/x-icon">
+      <link rel="shortcut icon" href="{{ get_site('favicon') }}" type="image/x-icon">
       <!-- Demo Examples (For Module #3) -->
 	  <link rel="alternate stylesheet" type="text/css" href="{{ theme_asset('default/assets/styles/maincolors.css') }}" title="maincolors" media="all" />
       <link rel="alternate stylesheet" type="text/css" href="{{ theme_asset('default/assets/styles/cuteandbright.css') }}" title="cuteandbright" media="all" />

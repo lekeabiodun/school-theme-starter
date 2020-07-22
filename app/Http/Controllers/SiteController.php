@@ -17,6 +17,7 @@ class SiteController extends Controller
     public function index()
     {
         $blocks = collect(explode(',', env('THEME_INDEX_BLOCKS')))->map(function($block) { return (object) ['name' => $block]; });
+        // dd($blocks);
         return view("themes.$this->theme_name.page", compact('blocks'));
     }
 
@@ -52,10 +53,10 @@ class SiteController extends Controller
 
     public function post($post)
     {
-        $post = Post::whereSlug($post)->first();
-        if(!file_exists(resource_path('views/themes/'.$this->theme_name.'/post.blade.php'))){ return abort('404'); }
-        if($post){ return view('themes.'.$this->theme_name.'.post', compact('post')); }
-        return abort('404');
+        $post = get_site("news")->first();
+        $title = "News"; #get_site('contact_title');
+        $subtitle = "News";
+        return view("themes.$this->theme_name.post", compact('post', 'title', 'subtitle'));
     }
     
 }

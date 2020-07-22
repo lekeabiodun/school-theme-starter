@@ -9,3 +9,4 @@ Route::get('/contact', 'SiteController@contact')->name('contact');
 Route::post('/contact', 'SiteController@contactUs')->name('contactUs');
 Route::post('/contact', 'SiteController@contactUs');
 Route::get('/events', 'SiteController@events')->name('events');
+Route::get('/{post}', 'SiteController@post')->name('post');

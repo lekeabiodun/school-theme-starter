@@ -6,9 +6,16 @@
         @includeIf($THEMEBLOCK->banner)
     @endisset
 
-    @foreach($blocks as $block)
-        @includeIf(theme_block($block->name))
-    @endforeach
+    @isset($blocks)
+        @foreach($blocks as $block)
+            @includeIf(theme_block($block->name))
+        @endforeach
+    @endisset
+
+    @isset($post)
+        @includeIf($THEMEBLOCK->banner)
+    @endisset
+    
     {{-- @include($THEMEBLOCK->banner) --}}
     {{-- @include($THEMEBLOCK->sliders)
     @include($THEMEBLOCK->about)
