@@ -2,7 +2,96 @@
 
 use App\Theme;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
+class Slider 
+{
+	public function __construct($array)
+	{
+		$this->image = $array['image'];
+		$this->title = $array['title'];
+		$this->subtitle = $array['subtitle'];
+		$this->text = $array['text'];
+		$this->action = $array['action'];
+		$this->link = $array['link'];
+	}
+
+	public function image()
+	{
+		return $this->image;
+	}
+
+}
+
+
+class News 
+{
+	public function __construct($array)
+	{
+		$this->author = $array['author'];
+		$this->title = $array['title'];
+		$this->body = $array['body'];
+		$this->excerpt = $array['body'];
+		$this->slug = $array['slug'];
+		$this->image = $array['image'];
+		$this->created_at = $array['created_at'];
+
+	}
+
+	public function image()
+	{
+		return $this->image;
+	}
+}
+
+
+class Staff 
+{
+	public function __construct($array)
+	{
+		$this->name = $array['name'];
+		$this->position = $array['position'];
+		$this->image = $array['image'];
+	}
+
+	public function image()
+	{
+		return $this->image;
+	}
+
+}
+
+class Gallery 
+{
+	public function __construct($array)
+	{
+		$this->image = $array['image'];
+	}
+
+	public function image()
+	{
+		return $this->image;
+	}
+
+}
+
+if(!function_exists('getImage')){
+	function getImage($imageLink, $disk='local'){
+
+		$filename = basename($imageLink);
+		$filedirname = basename(dirname($imageLink));
+
+		if(file_exists('storage/'.$filedirname.'/'.$filename))
+		{
+			return $imageLink;
+		}
+		if(Storage::disk($disk)->exists($imageLink)){
+			return secure_asset(Storage::disk($disk)->url($imageLink));
+		} else{
+			return secure_asset('storage/not-available.png');
+		}
+	}
+}
 
 if(!function_exists('theme_layout')){
 	function theme_layout($theme_name, $layout='layout') {
@@ -50,8 +139,8 @@ if(!function_exists('get_site')){
 	}
 }
 
-
 function site_data() {
+
 	return [
 		'slide1_image' => asset('storage/sliders/slide1.jpg'),
 		'slide1_title' => 'Welcome to Little Ones',
@@ -73,31 +162,32 @@ function site_data() {
 		'slide3_link' => 'home',
 
 		'sliders' => collect([
-			(object)[
+			new Slider([
 				'image' => asset('storage/sliders/slide1.jpg'),
 				'title' => 'Welcome to Little Ones',
 				'subtitle' => 'Little Ones is a Super Fun Daycare / Children',
 				'text' => "Education is not just about going to school and getting a degree. It's about widening your knowledge and absorbing the truth about life. Knowledge is power.",
 				'action' => 'Start Now',
 				'link' => url('home'),
-			],
-			(object)[
+			]),
+			new Slider([
 				'image' => asset('storage/sliders/slide2.jpg'),
 				'title' => 'Best You can ever get',
 				'subtitle' => 'Little Ones is a Super Fun Daycare / Children',
 				'text' => "Education is not just about going to school and getting a degree. It's about widening your knowledge and absorbing the truth about life. Knowledge is power.",
 				'action' => 'Learn More',
 				'link' => url('about'),
-			],
-			(object)[
+			]),
+			new Slider([
 				'image' => asset('storage/sliders/slide3.jpg'),
 				'title' => 'Knowledge is power',
 				'subtitle' => 'Little Ones is a Super Fun Daycare / Children',
 				'text' => "Education is not just about going to school and getting a degree. It's about widening your knowledge and absorbing the truth about life. Knowledge is power.",
 				'action' => 'Contact Us',
 				'link' => url('contact'),
-			]
+			])
 		]),
+
 		'menu' => collect([
 			(object)[
 				'name' => 'Home',
@@ -112,6 +202,7 @@ function site_data() {
 				'link' => url('contact'),
 			]
 		]),
+
 		'social_links' => collect([
 			(object)[
 				'name' => 'facebook',
@@ -126,6 +217,7 @@ function site_data() {
 				'link' => 'https://www.twitter.com/littleones',
 			]
 		]),
+
 		'favicon' => asset('storage/favicon.ico'),
 		'logo' => asset('storage/logo.png'),
 		'logo-light' => asset('storage/logo-light.png'),
@@ -178,7 +270,7 @@ function site_data() {
 		'news_subtitle' => 'Get latest breaking news & top stories today',
 
 		'news' => collect([
-			(object)[
+			new News([
 				'author' => (object)[
 					'name' => 'Pemisire Tinubu',
 				],
@@ -187,8 +279,8 @@ function site_data() {
 				'slug' => "the-best-nutrition-snacks",
 				'image' => asset('storage/posts/blogprev1.jpg'),
 				'created_at' => now()->addDays(-24)
-			],
-			(object)[
+			]),
+			new News([
 				'author' => (object)[
 					'name' => 'Pemisire Tinubu',
 				],
@@ -197,8 +289,8 @@ function site_data() {
 				'slug' => "the-best-nutrition-snacks",
 				'image' => asset('storage/posts/blogprev2.jpg'),
 				'created_at' => now()->addDays(-84)
-			],
-			(object)[
+			]),
+			new News([
 				'author' => (object)[
 					'name' => 'Pemisire Tinubu',
 				],
@@ -207,8 +299,8 @@ function site_data() {
 				'slug' => "the-best-nutrition-snacks",
 				'image' => asset('storage/posts/blogprev3.jpg'),
 				'created_at' => now()->addDays(-98)
-			],
-			(object)[
+			]),
+			new News([
 				'author' => (object)[
 					'name' => 'Pemisire Tinubu',
 				],
@@ -217,8 +309,9 @@ function site_data() {
 				'slug' => "the-best-nutrition-snacks",
 				'image' => asset('storage/posts/blogprev4.jpg'),
 				'created_at' => now()->addDays(-4)
-			],
+			]),
 		]),
+
 		'gallery1_image' => asset('storage/gallery/gallery1.jpg'),
 		'gallery2_image' => asset('storage/gallery/gallery2.jpg'),
 		'gallery3_image' => asset('storage/gallery/gallery3.jpg'),
@@ -229,85 +322,59 @@ function site_data() {
 		'gallery8_image' => asset('storage/gallery/gallery8.jpg'),
 
 		'staff' => collect([
-			(object)[
+			new Staff([
 				'name' => 'Mr. Ademola Jimoh',
 				'position' => 'Principal',
 				'image' => asset('storage/staff/team2.jpg'),
-			],
-			(object)[
+			]),
+			new Staff([
 				'name' => 'Mrs. Mercy Akunyili',
 				'position' => 'H.O.D.',
 				'image' => asset('storage/staff/team1.jpg'),
-			],
-			(object)[
+			]),
+			new Staff([
 				'name' => 'Ms. Bola Ahmed',
 				'position' => 'English Teacher',
 				'image' => asset('storage/staff/team3.jpg'),
-			],
-			(object)[
+			]),
+			new Staff([
 				'name' => 'Mrs. Ajayi Bimbo',
 				'position' => 'Biolgy Teacher',
 				'image' => asset('storage/staff/team4.jpg'),
-			],
-			(object)[
+			]),
+			new Staff([
 				'name' => 'Mr. David Ayin',
 				'position' => 'Math Teach',
 				'image' => asset('storage/staff/team5.jpg'),
-			],
+			]),
 		]),
 
-		
-
-
+		'gallery' => collect([
+			new Gallery([
+				'image' => asset('storage/gallery/gallery1.jpg'),
+			]),
+			new Gallery([
+				'image' => asset('storage/gallery/gallery2.jpg'),
+			]),
+			new Gallery([
+				'image' => asset('storage/gallery/gallery3.jpg'),
+			]),
+			new Gallery([
+				'image' => asset('storage/gallery/gallery4.jpg'),
+			]),
+			new Gallery([
+				'image' => asset('storage/gallery/gallery5.jpg'),
+			]),
+			new Gallery([
+				'image' => asset('storage/gallery/gallery6.jpg'),
+			]),
+			new Gallery([
+				'image' => asset('storage/gallery/gallery7.jpg'),
+			]),
+			new Gallery([
+				'image' => asset('storage/gallery/gallery8.jpg'),
+			]),
+		]),
 
 	];
 }
-/*
-	"news_title"
-	"news_subtitle"
-	"staff_title"
-	"staff_subtitle"
-	"history"
-	"history_image"
-	"statement_title"
-	"statement_subtitle"
-	"statement_image"
-	"mission_title"
-	"mission"
-	"vision_title"
-	"vision"
-	"community_title"
-	"community"
-	"logo"
-	"logo-light"
-	"working_time_title"
-	"address_title"
-	"working_time"
-	"address"
-	"footer_text"
-	"mobile"
-	"email"
-	"contact_title"
-	"statement_bg"
-	"menu_title"
-	"about_title"
-	"about_subtitle"
-	"about"
-	"about_image"
-	"site_title"
-	"site_subtitle"
-	"theme_color"
-	"gallery_1"
-	"gallery_2"
-	"gallery_3"
-	"gallery_4"
-	"gallery_5"
-	"gallery_6"
-	"gallery_7"
-	"gallery_8"
-	"history_title"
-	"history_subtitle"
-	"contact_subtitle"
-	"gallery_title"
-	"gallery_subtitle"
-*/
