@@ -31,7 +31,7 @@ class News
 		$this->author = $array['author'];
 		$this->title = $array['title'];
 		$this->body = $array['body'];
-		$this->excerpt = $array['body'];
+		$this->excerpt = substr($array['body'], 0, 150);
 		$this->slug = $array['slug'];
 		$this->image = $array['image'];
 		$this->created_at = $array['created_at'];
